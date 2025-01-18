@@ -28,6 +28,12 @@ class Contacts extends Client
         return $this->go('GET', "{$this->resource}/{$id}/activities");
     }
 
+    public function documents(int $id): Object
+    {
+        return $this->go('GET', "{$this->resource}/{$id}/document_associations");
+    }
+
+    
     /**
      * If you’d like to assign an owner to a list of contacts, use this API.
      * @param  array  $selected_ids
