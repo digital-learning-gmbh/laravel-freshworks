@@ -57,6 +57,31 @@ class Client
         return $this->toObject();
     }
 
+    public function downloadFile(string $method, string $uri = '', array $options = [], string $filePath): void
+    {
+        try {
+            $this->response = $this->client->request($method, $uri, $options);
+
+            if ($this->response->getStatusCode() === 200) {
+                $fileStream = fopen($filePath, 'w');
+                if (!$fileStream) {
+                    throw new \RuntimeException("Unable to open file at path: $filePath");
+                }
+
+                // Write response body to the file
+                $responseString = $this->response->getBody()->getContents();
+                fwrite($fileStream, $responseString);
+                fclose($fileStream);
+            } else {
+                throw new \RuntimeException("Unexpected response status: " . $this->response->getStatusCode());
+            }
+        } catch (RequestException $e) {
+            throw FreshworksException::fromGuzzleException($e);
+        } catch (Exception $e) {
+            throw new Exceptions\FreshworksException($e->getMessage(), $e->getCode());
+        }
+    }
+
     /**
      * Return the JSON response as an object
      * @return Object
