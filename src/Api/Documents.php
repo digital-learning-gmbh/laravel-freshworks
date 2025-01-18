@@ -14,7 +14,11 @@ use CodeGreenCreative\Freshworks\Traits\PerformsCrudOperations;
 class Documents extends Client
 {
     use PerformsCrudOperations;
+    private $resource = 'documents';
 
-    private $resource = 'cpq/cpq_documents';
+    public function downloadDocumentFromId($id, $storeAt)
+    {
+        return $this->downloadFile("GET","{$this->resource}/{$id}", [],$storeAt);
+    }
 
 }
