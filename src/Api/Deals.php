@@ -22,4 +22,9 @@ class Deals extends Client
     use CanBeForgotten;
 
     private $resource = 'deals';
+
+    public function documents(int $id): Object
+    {
+        return $this->go('GET', "{$this->resource}/{$id}/document_associations");
+    }
 }
